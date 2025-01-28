@@ -337,17 +337,39 @@ public class GameManager :MonoSingleton<GameManager>
     public void InitGame()
     {
         content1 = GameObject.Find("Canvas/Panel/List1/Viewport/Content").gameObject;
-        for (int i = 0; i < 30; i++)
-        {
-            var car = new CardInfo();
-            car.id = i;
-            playerCardList.Add(car);
-        }
-        Util.shuffle<CardInfo>(playerCardList);
+        
+        //Util.shuffle<CardInfo>(playerCardList);
+    }
+    //初始化牌组
+    public void InitCard()
+    {
+        CardInfo cardInfo = new CardInfo();
+        cardInfo.id = 1;
+        cardInfo.xjNumber = 0;
+        cardInfo.hpNumber = 1;
+        cardInfo.gjNumber = 1;
+        cardInfo.hpNumberNow = 1;
+        cardInfo.gjNumberNow = 1;
+        cardInfo.name = "小鱼人";
     }
     //添加牌
     public void AddShouCard()
     {
         var obj = AddPrefab("Item", content1.transform);
+    }
+    //出牌
+    public void PlayCard()
+    {
+        
+    }
+    //拖拽牌设置父节点
+    public void DrageCardSetFatherOut(GameObject _obj)
+    {
+        _obj.transform.SetParent(GameObject.Find("Canvas/Panel").transform);
+    }
+    //拖拽牌设置父节点
+    public void DrageCardSetFatherIn(GameObject _obj)
+    {
+        _obj.transform.parent = GameObject.Find("Canvas/Panel/List1/Viewport/Content").transform;
     }
 }

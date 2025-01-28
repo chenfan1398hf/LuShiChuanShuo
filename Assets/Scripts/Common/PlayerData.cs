@@ -12,7 +12,7 @@ public class PlayerData
         playerLocalizeState = 1;
         palyerUpdateTime = Convert.ToDateTime("2021-9-25");
         playerLogoutTime =DateTime.Now;
-
+        playerLevel = 1;
         playerSyntheticBtnset = 0;
         
     }
@@ -29,6 +29,7 @@ public class PlayerData
 
     public bool playerAudio1;                           //音效开关
     public bool playerAudio2;                           //音乐开关
+    public int playerLevel;                             //玩家关卡
 
 
     public Dictionary<String, TaskInfo> palyerTaskDic = new Dictionary<String, TaskInfo>();                         //任务数据
