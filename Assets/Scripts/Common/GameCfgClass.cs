@@ -38,6 +38,16 @@ public class TaskInfoCfg
     public int needUnlock;                  //是否需要解锁（0不需要1需要）
     public int vitality;                    //活跃度展示
 }
+//牌配置表
+public class CardInfoCfg
+{
+    public int ID;                          //ID
+    public int xjNumber = 0;            //打出需要消耗的心境值
+    public int hpNumber = 0;            //血量
+    public int gjNumber = 0;            //攻击
+    public string name;                 //卡牌名称
+    public int type = 0;                //卡牌类型0士兵牌 1法术牌
+}
 
 //牌数据
 public class CardInfo

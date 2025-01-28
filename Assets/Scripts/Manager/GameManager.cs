@@ -331,31 +331,155 @@ public class GameManager :MonoSingleton<GameManager>
         return allGameObjects.ToArray();
     }
 
+    private List<int> paiku = new List<int> {1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13,14,14,15,15 };
     private List<CardInfo> bossCardList = new List<CardInfo>();
     private List<CardInfo> playerCardList = new List<CardInfo>();
-    private GameObject content1;    
+    private GameObject content1;
+    public GameObject beginPanel;
     public void InitGame()
     {
         content1 = GameObject.Find("Canvas/Panel/List1/Viewport/Content").gameObject;
         
-        //Util.shuffle<CardInfo>(playerCardList);
+
+    }
+    //开始游戏
+    public void BeginGame()
+    {
+        beginPanel.SetActive(false);
+
     }
     //初始化牌组
     public void InitCard()
     {
-        CardInfo cardInfo = new CardInfo();
-        cardInfo.id = 1;
-        cardInfo.xjNumber = 0;
-        cardInfo.hpNumber = 1;
-        cardInfo.gjNumber = 1;
-        cardInfo.hpNumberNow = 1;
-        cardInfo.gjNumberNow = 1;
-        cardInfo.name = "小鱼人";
+        //读取牌组配置
+        for (int i = 0; i < paiku.Count; i++)
+        {
+            CardInfoCfg cfg = configMag.GetCardInfoCfgByKey(paiku[i]);
+            CardInfo cardInfo = new CardInfo();
+            cardInfo.id = cfg.ID;
+            cardInfo.xjNumber = cfg.xjNumber;
+            cardInfo.hpNumber = cfg.hpNumber;
+            cardInfo.gjNumber = cfg.gjNumber;
+            cardInfo.hpNumberNow = cfg.hpNumber;
+            cardInfo.gjNumberNow = cfg.gjNumber;
+            cardInfo.name = cfg.name;
+            cardInfo.type = cfg.type;
+            bossCardList.Add(cardInfo);
+
+            CardInfo cardInfo2 = new CardInfo();
+            cardInfo2.id = cfg.ID;
+            cardInfo2.xjNumber = cfg.xjNumber;
+            cardInfo2.hpNumber = cfg.hpNumber;
+            cardInfo2.gjNumber = cfg.gjNumber;
+            cardInfo2.hpNumberNow = cfg.hpNumber;
+            cardInfo2.gjNumberNow = cfg.gjNumber;
+            cardInfo2.name = cfg.name;
+            cardInfo2.type = cfg.type;
+            playerCardList.Add(cardInfo2);
+        }
+        //打乱排序
+        Util.shuffle<CardInfo>(bossCardList);
+        Util.shuffle<CardInfo>(playerCardList);
+
+        //随机牌组的心境类型
+        RandXjType();
+    }
+    //随机牌组心境类型
+    public void RandXjType()
+    {
+        //确定卡牌心境类型
+        List<int> bossRand = new List<int>();
+        List<int> playerRand = new List<int>();
+        if (playerData.playerLevel == 1)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                bossRand.Add(1);
+                playerRand.Add(1);
+            }
+        }
+        else if (playerData.playerLevel == 2)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                bossRand.Add(2);
+            }
+            playerRand.Add(1);
+            playerRand.Add(1);
+            playerRand.Add(1);
+            playerRand.Add(1);
+            playerRand.Add(2);
+            playerRand.Add(2);
+            playerRand.Add(2);
+            playerRand.Add(2);
+        }
+        else if (playerData.playerLevel == 3)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                bossRand.Add(3);
+            }
+            playerRand.Add(1);
+            playerRand.Add(1);
+            playerRand.Add(1);
+            playerRand.Add(3);
+            playerRand.Add(2);
+            playerRand.Add(2);
+            playerRand.Add(3);
+            playerRand.Add(3);
+        }
+        else if (playerData.playerLevel == 4)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                bossRand.Add(4);
+            }
+            playerRand.Add(1);
+            playerRand.Add(1);
+            playerRand.Add(2);
+            playerRand.Add(2);
+            playerRand.Add(3);
+            playerRand.Add(3);
+            playerRand.Add(4);
+            playerRand.Add(4);
+        }
+        else if (playerData.playerLevel == 5)
+        {
+            bossRand.Add(1);
+            bossRand.Add(1);
+            bossRand.Add(2);
+            bossRand.Add(2);
+            bossRand.Add(3);
+            bossRand.Add(3);
+            bossRand.Add(4);
+            bossRand.Add(4);
+
+            playerRand.Add(1);
+            playerRand.Add(1);
+            playerRand.Add(2);
+            playerRand.Add(2);
+            playerRand.Add(3);
+            playerRand.Add(3);
+            playerRand.Add(4);
+            playerRand.Add(4);
+        }
+
+        //随机赋值牌组的心境类型
+        for (int i = 0; i < 8; i++)
+        {
+            int randNumber = Util.randomInt(1, 29);
+            bossCardList[randNumber].xjType = bossRand[i];
+        }
+        for (int i = 0; i < 8; i++)
+        {
+            int randNumber = Util.randomInt(1, 29);
+            bossCardList[randNumber].xjType = playerRand[i];
+        }
     }
     //添加牌
     public void AddShouCard()
     {
-        var obj = AddPrefab("Item", content1.transform);
+        var obj = AddPrefab("ShouCard", content1.transform);
     }
     //出牌
     public void PlayCard()
