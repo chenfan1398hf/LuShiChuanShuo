@@ -346,7 +346,7 @@ public class GameManager :MonoSingleton<GameManager>
     public void BeginGame()
     {
         beginPanel.SetActive(false);
-
+        InitCard();
     }
     //³õÊ¼»¯ÅÆ×é
     public void InitCard()
