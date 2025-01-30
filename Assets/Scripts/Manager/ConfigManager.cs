@@ -13,7 +13,7 @@ public class ConfigManager
     public void InitGameCfg()  //初始化自定义的游戏配置表
     {
         //故意未Try 这部分加载 如果配置表异常会直接关闭程序
-        string txt = FileTool.Read_Txt("taskInfo");
+        string txt = FileTool.Read_Txt("cardCfg");
         CardInfoCfg = JsonMapper.ToObject<List<CardInfoCfg>>(txt);
 
         return;
