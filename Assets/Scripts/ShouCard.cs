@@ -10,6 +10,7 @@ public class ShouCard : MonoBehaviour
     private Text hpText;
     private Image cardImage;
     private Text xjText;
+    private GameObject huiObj;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +28,7 @@ public class ShouCard : MonoBehaviour
         hpText = this.transform.Find("Image_hp/Text (Legacy)").GetComponent<Text>();
         xjText = this.transform.Find("Image_xj/Text (Legacy)").GetComponent<Text>();
         cardImage = this.transform.Find("Image_pai").GetComponent<Image>();
+        huiObj = this.transform.Find("ImageB").gameObject;
 
         info = _info;
         ShowCrad();
@@ -37,6 +39,16 @@ public class ShouCard : MonoBehaviour
         hpText.text = info.hpNumberNow.ToString();
         xjText.text = info.xjNumber.ToString();
         GameManager.instance.SpritPropImageByPath("KaPai/"+ info.imageId, cardImage);
+
+        //如果是BOSS手牌则置灰
+        if (info.state == 4)
+        {
+            huiObj.SetActive(true);
+        }
+        else
+        {
+            huiObj.SetActive(false);
+        }
     }
 
     public void DragMethod()

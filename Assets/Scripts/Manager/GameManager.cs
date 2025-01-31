@@ -339,13 +339,15 @@ public class GameManager :MonoSingleton<GameManager>
     private List<GameObject> bossShouCardList = new List<GameObject>();         //boss手牌
     private List<GameObject> playerShouCardList = new List<GameObject>();       //玩家手牌
 
-    private GameObject content1;
+    private GameObject content1;                //玩家手牌
+    private GameObject content2;                //玩家场牌
+    private GameObject content3;                //BOSS手牌
     public GameObject beginPanel;
     public void InitGame()
     {
         content1 = GameObject.Find("Canvas/Panel/List1/Viewport/Content").gameObject;
-        
-
+        content2 = GameObject.Find("Canvas/Panel/List2/Viewport/Content").gameObject;
+        content3 = GameObject.Find("Canvas/Panel/List3/Viewport/Content").gameObject;
     }
     //结束游戏
     public void EndGame()
@@ -387,6 +389,7 @@ public class GameManager :MonoSingleton<GameManager>
             cardInfo.name = cfg.name;
             cardInfo.type = cfg.type;
             cardInfo.imageId = cfg.imageId;
+            cardInfo.state = 2;
             bossCardList.Add(cardInfo);
 
             CardInfo cardInfo2 = new CardInfo();
@@ -400,6 +403,7 @@ public class GameManager :MonoSingleton<GameManager>
             cardInfo2.name = cfg.name;
             cardInfo2.type = cfg.type;
             cardInfo2.imageId = cfg.imageId;
+            cardInfo2.state = 1;
             playerCardList.Add(cardInfo2);
         }
         //打乱排序
@@ -501,24 +505,32 @@ public class GameManager :MonoSingleton<GameManager>
             playerCardList[randNumber].xjType = playerRand[i];
         }
     }
-    //添加牌
-    public void AddShouCard()
+    //添加玩家手牌
+    public void AddPlayerShouCard(int _number)
     {
-        //var obj = AddPrefab("ShouCard", content1.transform);
-        FaCard(playerCardList, playerShouCardList, 1, content1.transform);
+        FaCard(playerCardList, playerShouCardList, _number, content1.transform, 3);
+    }
+    //添加Boss手牌
+    public void AddBossShouCard(int _number)
+    {
+        FaCard(bossCardList, bossShouCardList, _number, content3.transform, 4);
     }
     //发牌
-    public void FaCard(List<CardInfo> _list1, List<GameObject> _list2, int _number, Transform _fatherTransform)
+    public void FaCard(List<CardInfo> _list1, List<GameObject> _list2, int _number, Transform _fatherTransform, int _cardState)
     {
-        if (_list1.Count <= 0)
+        for (int i = 0; i < _number; i++)
         {
-            return;
+            if (_list1.Count <= 0)
+            {
+                return;
+            }
+            CardInfo info = _list1.First();
+            info.state = _cardState;
+            _list1.RemoveAt(0);
+            var obj = AddPrefab("ShouCard", _fatherTransform);
+            obj.GetComponent<ShouCard>().InitCardInfo(info);
+            _list2.Add(obj);
         }
-        CardInfo info = _list1.First();
-        _list1.RemoveAt(0);
-        var obj = AddPrefab("ShouCard", _fatherTransform);
-        obj.GetComponent<ShouCard>().InitCardInfo(info);
-        _list2.Add(obj);
     }
     //出牌
     public void ChuCard()
