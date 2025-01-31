@@ -47,12 +47,14 @@ public class CardInfoCfg
     public int gjNumber = 0;            //攻击
     public string name;                 //卡牌名称
     public int type = 0;                //卡牌类型0士兵牌 1法术牌
+    public int imageId = 0;             //对应图片id
 }
 
 //牌数据
 public class CardInfo
 {
     public int id = 0;
+    public int addId = 0;               //自增id
     public int xjNumber = 0;            //打出需要消耗的心境值
     public int hpNumber = 0;            //血量
     public int gjNumber = 0;            //攻击
@@ -61,5 +63,6 @@ public class CardInfo
     public string name;                 //卡牌名称
     public int type = 0;                //卡牌类型0士兵牌 1法术牌
     public int xjType = 0;              //心境类型0无1喜2怒3哀3乐
+    public int imageId = 0;             //对应图片id
 }
 

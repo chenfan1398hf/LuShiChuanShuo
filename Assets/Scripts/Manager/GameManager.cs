@@ -332,8 +332,12 @@ public class GameManager :MonoSingleton<GameManager>
     }
 
     private List<int> paiku = new List<int> {1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13,14,14,15,15 };
-    private List<CardInfo> bossCardList = new List<CardInfo>();
-    private List<CardInfo> playerCardList = new List<CardInfo>();
+    private List<CardInfo> bossCardList = new List<CardInfo>();             //boss牌组
+    private List<CardInfo> playerCardList = new List<CardInfo>();           //玩家牌组
+
+    private List<GameObject> bossShouCardList = new List<GameObject>();         //boss手牌
+    private List<GameObject> playerShouCardList = new List<GameObject>();       //玩家手牌
+
     private GameObject content1;
     public GameObject beginPanel;
     public void InitGame()
@@ -341,6 +345,22 @@ public class GameManager :MonoSingleton<GameManager>
         content1 = GameObject.Find("Canvas/Panel/List1/Viewport/Content").gameObject;
         
 
+    }
+    //结束游戏
+    public void EndGame()
+    {
+        bossCardList.Clear();
+        playerCardList.Clear();
+        foreach (var item in bossShouCardList)
+        {
+            Destroy(item);
+        }
+        foreach (var item in playerShouCardList)
+        {
+            Destroy(item);
+        }
+        bossShouCardList.Clear();
+        playerShouCardList.Clear();
     }
     //开始游戏
     public void BeginGame()
@@ -356,6 +376,7 @@ public class GameManager :MonoSingleton<GameManager>
         {
             CardInfoCfg cfg = configMag.GetCardInfoCfgByKey(paiku[i]);
             CardInfo cardInfo = new CardInfo();
+            cardInfo.addId = i;
             cardInfo.id = cfg.ID;
             cardInfo.xjNumber = cfg.xjNumber;
             cardInfo.hpNumber = cfg.hpNumber;
@@ -364,9 +385,11 @@ public class GameManager :MonoSingleton<GameManager>
             cardInfo.gjNumberNow = cfg.gjNumber;
             cardInfo.name = cfg.name;
             cardInfo.type = cfg.type;
+            cardInfo.imageId = cfg.imageId;
             bossCardList.Add(cardInfo);
 
             CardInfo cardInfo2 = new CardInfo();
+            cardInfo2.addId = 100+i;
             cardInfo2.id = cfg.ID;
             cardInfo2.xjNumber = cfg.xjNumber;
             cardInfo2.hpNumber = cfg.hpNumber;
@@ -375,6 +398,7 @@ public class GameManager :MonoSingleton<GameManager>
             cardInfo2.gjNumberNow = cfg.gjNumber;
             cardInfo2.name = cfg.name;
             cardInfo2.type = cfg.type;
+            cardInfo.imageId = cfg.imageId;
             playerCardList.Add(cardInfo2);
         }
         //打乱排序
@@ -473,7 +497,7 @@ public class GameManager :MonoSingleton<GameManager>
         for (int i = 0; i < 8; i++)
         {
             int randNumber = Util.randomInt(1, 29);
-            bossCardList[randNumber].xjType = playerRand[i];
+            playerCardList[randNumber].xjType = playerRand[i];
         }
     }
     //添加牌
@@ -481,8 +505,13 @@ public class GameManager :MonoSingleton<GameManager>
     {
         var obj = AddPrefab("ShouCard", content1.transform);
     }
+    //发牌
+    public void FaCard()
+    {
+        
+    }
     //出牌
-    public void PlayCard()
+    public void ChuCard()
     {
         
     }
