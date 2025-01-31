@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using Spine.Unity;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class GameManager :MonoSingleton<GameManager>
 {
@@ -398,7 +399,7 @@ public class GameManager :MonoSingleton<GameManager>
             cardInfo2.gjNumberNow = cfg.gjNumber;
             cardInfo2.name = cfg.name;
             cardInfo2.type = cfg.type;
-            cardInfo.imageId = cfg.imageId;
+            cardInfo2.imageId = cfg.imageId;
             playerCardList.Add(cardInfo2);
         }
         //¥Ú¬“≈≈–Ú
@@ -503,12 +504,21 @@ public class GameManager :MonoSingleton<GameManager>
     //ÃÌº”≈∆
     public void AddShouCard()
     {
-        var obj = AddPrefab("ShouCard", content1.transform);
+        //var obj = AddPrefab("ShouCard", content1.transform);
+        FaCard(playerCardList, playerShouCardList, 1, content1.transform);
     }
     //∑¢≈∆
-    public void FaCard()
+    public void FaCard(List<CardInfo> _list1, List<GameObject> _list2, int _number, Transform _fatherTransform)
     {
-        
+        if (_list1.Count <= 0)
+        {
+            return;
+        }
+        CardInfo info = _list1.First();
+        _list1.RemoveAt(0);
+        var obj = AddPrefab("ShouCard", _fatherTransform);
+        obj.GetComponent<ShouCard>().InitCardInfo(info);
+        _list2.Add(obj);
     }
     //≥ˆ≈∆
     public void ChuCard()
