@@ -50,23 +50,38 @@ public class ShouCard : MonoBehaviour
             huiObj.SetActive(false);
         }
     }
-
+    //玩家拖动牌
     public void DragMethod()
     {
-        GameManager.instance.DrageCardSetFatherOut(this.gameObject);
-        transform.position = Input.mousePosition;
+        //玩家手牌拖动出牌
+        if (info.state == 3)
+        {
+            GameManager.instance.DrageCardSetFatherOut(this.gameObject);
+            transform.position = Input.mousePosition;
+        }
+        
     }
+    //结束拖动
     public void EndDragMethod()
     {
-        if (this.transform.position.y >= 300f)
+        if (info.state == 3)
         {
-            //成功
-            Debug.Log(this.transform.position.y);
+            if (this.transform.position.y >= 300f)
+            {
+                //成功
+                GameManager.instance.ChuCard(this.gameObject, info);
+            }
+            else
+            {
+                //失败
+                GameManager.instance.DrageCardSetFatherIn(this.gameObject);
+            }
         }
-        else
-        {
-            //失败
-            GameManager.instance.DrageCardSetFatherIn(this.gameObject);
-        }
+       
+    }
+    //玩家点击牌
+    public void OnClickCard()
+    { 
+
     }
 }

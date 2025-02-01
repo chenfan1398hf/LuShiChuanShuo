@@ -24,3 +24,65 @@ public class ConfigManager
         return CardInfoCfg.Find((item) => item.ID == key);
     }
 }
+
+public class CardPlayManager
+{
+    private int operand = 1;        //本回合操作对象 1玩家2BOSS
+    private int hhNumber = 0;       //当前回合数
+    private int endTime = 30;       //回合结束时间
+    private int xyNumber = 0;       //本局剩余心愿数量
+
+    //初始化数据
+    public void InitData()
+    {
+        operand = 1;
+        hhNumber = 0;
+        endTime = 30;
+        xyNumber = GetHhXyNumber();
+    }
+    //获取回合心愿值
+    public int GetHhXyNumber()
+    {
+        int iRet = 0;
+        iRet = hhNumber / 2 + 1;
+        if (iRet > 10)
+        {
+            iRet = 10;
+        }
+        return iRet;
+    }
+    //回合倒计时
+    public void EndTime(int _number)
+    {
+        endTime += _number;
+    }
+    //获取回合倒计时
+    public int GetEndTiemNumber()
+    {
+        return endTime;
+    }
+    //回合结束
+    public void EndHuiHe()
+    {
+        hhNumber++;
+        endTime = 30;
+        if (operand == 1)
+        {
+            operand = 2;
+        }
+        else
+        {
+            operand = 1;
+        }
+    }
+    //获取回合操作者
+    public int GetOperand()
+    {
+        return operand;
+    }
+    //获取剩余心愿数量
+    public int GetXyNumber()
+    {
+        return xyNumber;
+    }
+}

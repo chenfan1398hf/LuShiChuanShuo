@@ -339,6 +339,11 @@ public class GameManager :MonoSingleton<GameManager>
     private List<GameObject> bossShouCardList = new List<GameObject>();         //boss手牌
     private List<GameObject> playerShouCardList = new List<GameObject>();       //玩家手牌
 
+    private List<GameObject> bossChangCardList = new List<GameObject>();         //boss场牌
+    private List<GameObject> playerChangCardList = new List<GameObject>();       //玩家场牌
+
+    private CardPlayManager cardPlayManager = new CardPlayManager();            //牌局管理
+
     private GameObject content1;                //玩家手牌
     private GameObject content2;                //玩家场牌
     private GameObject content3;                //BOSS手牌
@@ -364,12 +369,28 @@ public class GameManager :MonoSingleton<GameManager>
         }
         bossShouCardList.Clear();
         playerShouCardList.Clear();
+
+        foreach (var item in bossChangCardList)
+        {
+            Destroy(item);
+        }
+        foreach (var item in playerChangCardList)
+        {
+            Destroy(item);
+        }
+        bossChangCardList.Clear();
+        playerChangCardList.Clear();
     }
     //开始游戏
     public void BeginGame()
     {
         beginPanel.SetActive(false);
+        //初始化牌组
         InitCard();
+        //初始化牌局管理
+        cardPlayManager.InitData();
+        //初始化界面
+        UpdateXyShow();
     }
     //初始化牌组
     public void InitCard()
@@ -533,9 +554,18 @@ public class GameManager :MonoSingleton<GameManager>
         }
     }
     //出牌
-    public void ChuCard()
+    public void ChuCard(GameObject _obj, CardInfo _cardInfo)
     {
-        
+        //先把父节点设置了
+        _obj.transform.SetParent(content2.transform);
+        //获取卡牌数据
+        _cardInfo.state = 5;
+        //删除手牌数据
+        playerShouCardList.Remove(_obj);
+        //加入场牌数据
+        playerChangCardList.Add(_obj);
+
+        return;
     }
     //拖拽牌设置父节点
     public void DrageCardSetFatherOut(GameObject _obj)
@@ -546,5 +576,32 @@ public class GameManager :MonoSingleton<GameManager>
     public void DrageCardSetFatherIn(GameObject _obj)
     {
         _obj.transform.parent = GameObject.Find("Canvas/Panel/List1/Viewport/Content").transform;
+    }
+    //刷新心愿值
+    public void UpdateXyShow()
+    {
+        GameObject trs;
+        if (cardPlayManager.GetOperand() == 1)
+        {
+           trs = GameObject.Find("Canvas/Panel/ShuiJingPlayer");
+        }
+        else
+        {
+            trs = GameObject.Find("Canvas/Panel/ShuiJingBoss");
+        }
+        
+        int xyNumber = cardPlayManager.GetXyNumber();
+        for (int i = 1; i < 11; i++)
+        {
+            var obj = trs.transform.Find("Image" + i).gameObject;
+            if (i <= xyNumber)
+            {
+                obj.SetActive(true);
+            }
+            else
+            {
+                obj.SetActive(false);
+            }
+        }
     }
 }
