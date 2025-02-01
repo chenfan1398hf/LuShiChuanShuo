@@ -347,12 +347,15 @@ public class GameManager :MonoSingleton<GameManager>
     private GameObject content1;                //玩家手牌
     private GameObject content2;                //玩家场牌
     private GameObject content3;                //BOSS手牌
+    private GameObject gamePanel;               //游戏panel节点
     public GameObject beginPanel;
     public void InitGame()
     {
+        beginPanel.SetActive(true);
         content1 = GameObject.Find("Canvas/Panel/List1/Viewport/Content").gameObject;
         content2 = GameObject.Find("Canvas/Panel/List2/Viewport/Content").gameObject;
         content3 = GameObject.Find("Canvas/Panel/List3/Viewport/Content").gameObject;
+        gamePanel = GameObject.Find("Canvas/Panel").gameObject;
     }
     //结束游戏
     public void EndGame()
@@ -391,6 +394,8 @@ public class GameManager :MonoSingleton<GameManager>
         cardPlayManager.InitData();
         //初始化界面
         UpdateXyShow();
+        //刷新结束回合按钮
+        UpdateEndHuiHeBUtton();
     }
     //初始化牌组
     public void InitCard()
@@ -602,6 +607,24 @@ public class GameManager :MonoSingleton<GameManager>
             {
                 obj.SetActive(false);
             }
+        }
+    }
+    //玩家结束回合
+    public void PlayerEndHuiHe()
+    {
+        cardPlayManager.EndHuiHe();
+        UpdateEndHuiHeBUtton();
+    }
+    //刷新回合按钮
+    public void UpdateEndHuiHeBUtton()
+    {
+        if (cardPlayManager.GetOperand() == 1)
+        {
+            gamePanel.transform.Find("Button_end").gameObject.SetActive(true);
+        }
+        else
+        {
+            gamePanel.transform.Find("Button_end").gameObject.SetActive(false);
         }
     }
 }

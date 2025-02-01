@@ -66,7 +66,7 @@ public class ShouCard : MonoBehaviour
     {
         if (info.state == 3)
         {
-            if (this.transform.position.y >= 300f)
+            if (this.transform.position.y >= 400f)
             {
                 //³É¹¦
                 GameManager.instance.ChuCard(this.gameObject, info);

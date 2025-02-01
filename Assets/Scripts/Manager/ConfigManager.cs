@@ -39,6 +39,8 @@ public class CardPlayManager
         hhNumber = 0;
         endTime = 30;
         xyNumber = GetHhXyNumber();
+        FaPaiFirst();
+        BeginHuiHe();
     }
     //获取回合心愿值
     public int GetHhXyNumber()
@@ -74,6 +76,20 @@ public class CardPlayManager
         {
             operand = 1;
         }
+        BeginHuiHe();
+    }
+    //回合开始
+    public void BeginHuiHe()
+    {
+        GameManager.instance.UpdateXyShow();
+        if (operand == 1)
+        {
+            GameManager.instance.AddPlayerShouCard(1);
+        }
+        else
+        {
+            GameManager.instance.AddBossShouCard(1);
+        }
     }
     //获取回合操作者
     public int GetOperand()
@@ -84,5 +100,12 @@ public class CardPlayManager
     public int GetXyNumber()
     {
         return xyNumber;
+    }
+    //发牌
+    public void FaPaiFirst()
+    {
+        int number = 3;
+        GameManager.instance.AddBossShouCard(number);
+        GameManager.instance.AddPlayerShouCard(number);
     }
 }
