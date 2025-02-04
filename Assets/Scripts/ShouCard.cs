@@ -39,7 +39,11 @@ public class ShouCard : MonoBehaviour
         hpText.text = info.hpNumberNow.ToString();
         xjText.text = info.xjNumber.ToString();
         GameManager.instance.SpritPropImageByPath("KaPai/"+ info.imageId, cardImage);
+        UpdateCardBack();
 
+    }
+    public void UpdateCardBack()
+    {
         //如果是BOSS手牌则置灰
         if (info.state == 4)
         {
@@ -54,7 +58,7 @@ public class ShouCard : MonoBehaviour
     public void DragMethod()
     {
         //玩家手牌拖动出牌
-        if (info.state == 3)
+        if (info.state == 3 && GameManager.instance.GetPlayerOperand())
         {
             GameManager.instance.DrageCardSetFatherOut(this.gameObject);
             transform.position = Input.mousePosition;
@@ -69,7 +73,12 @@ public class ShouCard : MonoBehaviour
             if (this.transform.position.y >= 400f)
             {
                 //成功
-                GameManager.instance.ChuCard(this.gameObject, info);
+                bool isBool = GameManager.instance.ChuCard(this.gameObject, info);
+                if (isBool == false)
+                {
+                    //失败
+                    GameManager.instance.DrageCardSetFatherIn(this.gameObject);
+                }
             }
             else
             {
@@ -83,5 +92,10 @@ public class ShouCard : MonoBehaviour
     public void OnClickCard()
     { 
 
+    }
+    //获取牌数据
+    public CardInfo GetCardInfo()
+    {
+        return info;
     }
 }

@@ -9,7 +9,7 @@ using Spine.Unity;
 using UnityEngine.SceneManagement;
 using System.Linq;
 
-public class GameManager :MonoSingleton<GameManager>
+public class GameManager : MonoSingleton<GameManager>
 {
     #region 构造函数及其变量
     public GameManager()
@@ -61,7 +61,7 @@ public class GameManager :MonoSingleton<GameManager>
 
         if (TimeNumber % 10 == 0)
         {
-       
+
         }
         if (TimeNumber % 20 == 0)
         {
@@ -332,7 +332,7 @@ public class GameManager :MonoSingleton<GameManager>
         return allGameObjects.ToArray();
     }
 
-    private List<int> paiku = new List<int> {1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13,14,14,15,15 };
+    private List<int> paiku = new List<int> { 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15 };
     private List<CardInfo> bossCardList = new List<CardInfo>();             //boss牌组
     private List<CardInfo> playerCardList = new List<CardInfo>();           //玩家牌组
 
@@ -347,6 +347,7 @@ public class GameManager :MonoSingleton<GameManager>
     private GameObject content1;                //玩家手牌
     private GameObject content2;                //玩家场牌
     private GameObject content3;                //BOSS手牌
+    private GameObject content4;                //BOSS场牌
     private GameObject gamePanel;               //游戏panel节点
     public GameObject beginPanel;
     public void InitGame()
@@ -355,6 +356,7 @@ public class GameManager :MonoSingleton<GameManager>
         content1 = GameObject.Find("Canvas/Panel/List1/Viewport/Content").gameObject;
         content2 = GameObject.Find("Canvas/Panel/List2/Viewport/Content").gameObject;
         content3 = GameObject.Find("Canvas/Panel/List3/Viewport/Content").gameObject;
+        content4 = GameObject.Find("Canvas/Panel/List4/Viewport/Content").gameObject;
         gamePanel = GameObject.Find("Canvas/Panel").gameObject;
     }
     //结束游戏
@@ -419,7 +421,7 @@ public class GameManager :MonoSingleton<GameManager>
             bossCardList.Add(cardInfo);
 
             CardInfo cardInfo2 = new CardInfo();
-            cardInfo2.addId = 100+i;
+            cardInfo2.addId = 100 + i;
             cardInfo2.id = cfg.ID;
             cardInfo2.xjNumber = cfg.xjNumber;
             cardInfo2.hpNumber = cfg.hpNumber;
@@ -559,18 +561,45 @@ public class GameManager :MonoSingleton<GameManager>
         }
     }
     //出牌
-    public void ChuCard(GameObject _obj, CardInfo _cardInfo)
+    public bool ChuCard(GameObject _obj, CardInfo _cardInfo)
     {
+        if (cardPlayManager.GetXyNumber() < _cardInfo.xjNumber)
+        {
+            return false;
+        }
         //先把父节点设置了
         _obj.transform.SetParent(content2.transform);
         //获取卡牌数据
-        _cardInfo.state = 5;
+        _cardInfo.state = 6;
         //删除手牌数据
         playerShouCardList.Remove(_obj);
         //加入场牌数据
         playerChangCardList.Add(_obj);
-
-        return;
+        //扣除心境值
+        cardPlayManager.AddXjNumber(-_cardInfo.xjNumber);
+        
+        return true;
+    }
+    //Boss出牌
+    public bool ChuPaiBoss(GameObject _obj, CardInfo _cardInfo)
+    {
+        if (cardPlayManager.GetXyNumber() < _cardInfo.xjNumber)
+        {
+            return false;
+        }
+        //先把父节点设置了
+        _obj.transform.SetParent(content4.transform);
+        //获取卡牌数据
+        _cardInfo.state = 5;
+        //删除手牌数据
+        bossShouCardList.Remove(_obj);
+        //加入场牌数据
+        bossChangCardList.Add(_obj);
+        //扣除心境值
+        cardPlayManager.AddXjNumber(-_cardInfo.xjNumber);
+        //刷新牌背
+        _obj.GetComponent<ShouCard>().UpdateCardBack();
+        return true;
     }
     //拖拽牌设置父节点
     public void DrageCardSetFatherOut(GameObject _obj)
@@ -588,13 +617,13 @@ public class GameManager :MonoSingleton<GameManager>
         GameObject trs;
         if (cardPlayManager.GetOperand() == 1)
         {
-           trs = GameObject.Find("Canvas/Panel/ShuiJingPlayer");
+            trs = GameObject.Find("Canvas/Panel/ShuiJingPlayer");
         }
         else
         {
             trs = GameObject.Find("Canvas/Panel/ShuiJingBoss");
         }
-        
+
         int xyNumber = cardPlayManager.GetXyNumber();
         for (int i = 1; i < 11; i++)
         {
@@ -625,6 +654,57 @@ public class GameManager :MonoSingleton<GameManager>
         else
         {
             gamePanel.transform.Find("Button_end").gameObject.SetActive(false);
+        }
+    }
+    //获取回合是否是玩家回合
+    public bool GetPlayerOperand()
+    {
+        return cardPlayManager.GetOperand() == 1;
+    }
+    //AI攻击
+    public IEnumerator BossPlayerCard()
+    {
+
+        for (int i = 0; i < 10; i++)
+        {
+            var obj = GetMaxXjCard();
+            if (obj == null)
+            {
+                yield return new WaitForSeconds(1f);
+                //结束回合
+                PlayerEndHuiHe();
+                yield break;
+            }
+            //出牌
+            ChuPaiBoss(obj, obj.GetComponent<ShouCard>().GetCardInfo());
+            yield return new WaitForSeconds(1f);
+        }
+
+        yield return new WaitForSeconds(1f);
+
+    }
+    //获取当前手牌里心境最高的牌
+    public GameObject GetMaxXjCard()
+    {
+        int haveXj = cardPlayManager.GetXyNumber();
+        int maxXj = -1;
+        int maxIndex = -1;
+        for (int i = 0; i < bossShouCardList.Count; i++)
+        {
+            var info = bossShouCardList[i].GetComponent<ShouCard>().GetCardInfo();
+            if (haveXj >= info.xjNumber && info.xjNumber > maxXj)
+            {
+                maxXj = info.xjNumber;
+                maxIndex = i;
+            }
+        }
+        if (maxIndex <= 0)
+        {
+            return null;
+        }
+        else
+        {
+            return bossShouCardList[maxIndex];
         }
     }
 }

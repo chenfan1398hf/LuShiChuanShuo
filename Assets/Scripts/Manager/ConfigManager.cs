@@ -81,6 +81,7 @@ public class CardPlayManager
     //回合开始
     public void BeginHuiHe()
     {
+        xyNumber = GetHhXyNumber();
         GameManager.instance.UpdateXyShow();
         if (operand == 1)
         {
@@ -89,6 +90,7 @@ public class CardPlayManager
         else
         {
             GameManager.instance.AddBossShouCard(1);
+            GameManager.instance.StartCoroutine(GameManager.instance.BossPlayerCard());
         }
     }
     //获取回合操作者
@@ -100,6 +102,13 @@ public class CardPlayManager
     public int GetXyNumber()
     {
         return xyNumber;
+    }
+    //修改心境值
+    public void AddXjNumber(int _number)
+    {
+        xyNumber += _number;
+        //刷新
+        GameManager.instance.UpdateXyShow();
     }
     //发牌
     public void FaPaiFirst()
