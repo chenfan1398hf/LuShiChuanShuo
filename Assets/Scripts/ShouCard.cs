@@ -11,6 +11,7 @@ public class ShouCard : MonoBehaviour
     private Image cardImage;
     private Text xjText;
     private GameObject huiObj;
+    private Image bg;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +30,7 @@ public class ShouCard : MonoBehaviour
         xjText = this.transform.Find("Image_xj/Text (Legacy)").GetComponent<Text>();
         cardImage = this.transform.Find("Image_pai").GetComponent<Image>();
         huiObj = this.transform.Find("ImageB").gameObject;
-
+        bg = this.gameObject.GetComponent<Image>();
         info = _info;
         ShowCrad();
     }
@@ -97,5 +98,17 @@ public class ShouCard : MonoBehaviour
     public CardInfo GetCardInfo()
     {
         return info;
+    }
+    //¿É¹¥»÷±äÉ«
+    public void ShowAttack()
+    {
+        if (info.attackNumber > 0)
+        {
+            bg.color = Color.green;
+        }
+        else
+        {
+            bg.color = Color.white;
+        }
     }
 }

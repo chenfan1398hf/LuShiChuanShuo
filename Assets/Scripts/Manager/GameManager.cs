@@ -661,7 +661,7 @@ public class GameManager : MonoSingleton<GameManager>
     {
         return cardPlayManager.GetOperand() == 1;
     }
-    //AI攻击
+    //AI出牌
     public IEnumerator BossPlayerCard()
     {
 
@@ -707,4 +707,67 @@ public class GameManager : MonoSingleton<GameManager>
             return bossShouCardList[maxIndex];
         }
     }
+    //存在回合数增加
+    public void AddLiveHh(int _type)
+    {
+        List<GameObject> list;
+        if (_type == 1)
+        {
+            list = playerChangCardList;
+        }
+        else
+        {
+            list = bossChangCardList;
+        }
+        foreach (var item in list)
+        {
+            var info = item.GetComponent<ShouCard>().GetCardInfo();
+            info.liveHh++;
+        }
+    }
+    //场牌攻击次数增加
+    public void AddAttackNumnber(int _type)
+    {
+        List<GameObject> list;
+        if (_type == 1)
+        {
+            list = playerChangCardList;
+        }
+        else
+        {
+            list = bossChangCardList;
+        }
+        foreach (var item in list)
+        {
+            var info = item.GetComponent<ShouCard>().GetCardInfo();
+            if (info.liveHh > 0)
+            {
+                info.attackNumber = 1;
+                item.GetComponent<ShouCard>().ShowAttack();
+            }
+        }
+    }
+    //回收攻击次数
+    public void RecycleAttackNumber(int _type)
+    {
+        List<GameObject> list;
+        if (_type == 1)
+        {
+            list = playerChangCardList;
+        }
+        else
+        {
+            list = bossChangCardList;
+        }
+        foreach (var item in list)
+        {
+            var info = item.GetComponent<ShouCard>().GetCardInfo();
+            if (info.liveHh > 0)
+            {
+                info.attackNumber = 0;
+                item.GetComponent<ShouCard>().ShowAttack();
+            }
+        }
+    }
 }
+

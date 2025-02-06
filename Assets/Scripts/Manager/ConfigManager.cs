@@ -68,6 +68,8 @@ public class CardPlayManager
     {
         hhNumber++;
         endTime = 30;
+        GameManager.instance.AddLiveHh(operand);
+        GameManager.instance.RecycleAttackNumber(operand);
         if (operand == 1)
         {
             operand = 2;
@@ -86,6 +88,7 @@ public class CardPlayManager
         if (operand == 1)
         {
             GameManager.instance.AddPlayerShouCard(1);
+            GameManager.instance.AddAttackNumnber(1);
         }
         else
         {
