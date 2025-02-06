@@ -79,6 +79,7 @@ public class CardPlayManager
         {
             operand = 1;
         }
+        GameManager.instance.DesChangCard();
         BeginHuiHe();
     }
     //回合开始
@@ -87,11 +88,10 @@ public class CardPlayManager
         xyNumber = GetHhXyNumber();
         GameManager.instance.UpdateXyShow();
         GameManager.instance.SetCj(operand);
+        GameManager.instance.AddAttackNumnber(operand);
         if (operand == 1)
         {
             GameManager.instance.AddPlayerShouCard(1);
-            GameManager.instance.AddAttackNumnber(1);
-     
         }
         else
         {

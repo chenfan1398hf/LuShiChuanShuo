@@ -674,14 +674,35 @@ public class GameManager : MonoSingleton<GameManager>
             if (obj == null)
             {
                 yield return new WaitForSeconds(1f);
-                //结束回合
-                PlayerEndHuiHe();
-                yield break;
+
+                break;
             }
             //出牌
             ChuPaiBoss(obj, obj.GetComponent<ShouCard>().GetCardInfo());
             yield return new WaitForSeconds(1f);
         }
+        //AI攻击
+        foreach (var item in bossChangCardList)
+        {
+            if (item.GetComponent<ShouCard>().GetCardInfo().attackNumber > 0)
+            {
+                if (playerChangCardList.Count > 0)
+                {
+                    int randNumber;
+                    GameObject target;
+                    // 随机选择一个未失活的玩家卡牌
+                    randNumber = Util.randomInt(0, playerChangCardList.Count - 1);
+                    target = playerChangCardList[randNumber];
+                    if (target.activeInHierarchy)
+                    {
+                        StartCoroutine(AttackIEnumerator(item, target));
+                        yield return new WaitForSeconds(3f);
+                    }
+                }
+            }
+        }
+        //结束回合
+        PlayerEndHuiHe();
 
         yield return new WaitForSeconds(1f);
 
@@ -828,11 +849,25 @@ public class GameManager : MonoSingleton<GameManager>
        
     }
     //销毁场牌
-    public void DesChangCard(GameObject _obj)
+    public void DesChangCard()
     {
-        bossChangCardList.Remove(_obj);
-        playerChangCardList.Remove(_obj);
-        Destroy(_obj);
+        for (int i = playerChangCardList.Count - 1; i >= 0; i--)
+        {
+            if (playerChangCardList[i].activeSelf == false) 
+            {
+                Destroy(playerChangCardList[i]);
+                playerChangCardList.RemoveAt(i);
+            }
+        }
+
+        for (int i = bossChangCardList.Count - 1; i >= 0; i--)
+        {
+            if (bossChangCardList[i].activeSelf == false)
+            {
+                Destroy(bossChangCardList[i]);
+                bossChangCardList.RemoveAt(i);
+            }
+        }
     }
 
 }

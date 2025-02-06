@@ -132,7 +132,7 @@ public class ShouCard : MonoBehaviour
     {
         if (info.hpNumberNow <= 0)
         {
-            GameManager.instance.DesChangCard(this.gameObject);
+            this.gameObject.SetActive(false);
         }
     }
 }
