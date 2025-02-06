@@ -32,6 +32,7 @@ public class CardPlayManager
     private int endTime = 30;       //回合结束时间
     private int xyNumber = 0;       //本局剩余心愿数量
 
+
     //初始化数据
     public void InitData()
     {
@@ -85,10 +86,12 @@ public class CardPlayManager
     {
         xyNumber = GetHhXyNumber();
         GameManager.instance.UpdateXyShow();
+        GameManager.instance.SetCj(operand);
         if (operand == 1)
         {
             GameManager.instance.AddPlayerShouCard(1);
             GameManager.instance.AddAttackNumnber(1);
+     
         }
         else
         {
@@ -120,4 +123,5 @@ public class CardPlayManager
         GameManager.instance.AddBossShouCard(number);
         GameManager.instance.AddPlayerShouCard(number);
     }
+  
 }

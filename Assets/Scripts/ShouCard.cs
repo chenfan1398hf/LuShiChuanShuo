@@ -111,4 +111,28 @@ public class ShouCard : MonoBehaviour
             bg.color = Color.white;
         }
     }
+    //卡牌攻击
+    public void CardAttack()
+    {
+        GameManager.instance.Attack(this.gameObject);
+    }
+    //增加血量
+    public void addHpNumber(int _number)
+    {
+        info.hpNumberNow += _number;
+        ShowCrad();
+    }
+    //扣除行动次数
+    public void addAttackNumber(int _number)
+    {
+        info.attackNumber += _number;
+        ShowAttack();
+    }
+    public void CheckHp()
+    {
+        if (info.hpNumberNow <= 0)
+        {
+            GameManager.instance.DesChangCard(this.gameObject);
+        }
+    }
 }

@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using Spine.Unity;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using DG.Tweening;
 
 public class GameManager : MonoSingleton<GameManager>
 {
@@ -343,6 +344,8 @@ public class GameManager : MonoSingleton<GameManager>
     private List<GameObject> playerChangCardList = new List<GameObject>();       //玩家场牌
 
     private CardPlayManager cardPlayManager = new CardPlayManager();            //牌局管理
+    private GameObject attackObj = null;   //攻击者场牌
+    private GameObject beAttackObj = null; //被攻击场牌
 
     private GameObject content1;                //玩家手牌
     private GameObject content2;                //玩家场牌
@@ -570,7 +573,7 @@ public class GameManager : MonoSingleton<GameManager>
         //先把父节点设置了
         _obj.transform.SetParent(content2.transform);
         //获取卡牌数据
-        _cardInfo.state = 6;
+        _cardInfo.state = 5;
         //删除手牌数据
         playerShouCardList.Remove(_obj);
         //加入场牌数据
@@ -590,7 +593,7 @@ public class GameManager : MonoSingleton<GameManager>
         //先把父节点设置了
         _obj.transform.SetParent(content4.transform);
         //获取卡牌数据
-        _cardInfo.state = 5;
+        _cardInfo.state = 6;
         //删除手牌数据
         bossShouCardList.Remove(_obj);
         //加入场牌数据
@@ -769,5 +772,68 @@ public class GameManager : MonoSingleton<GameManager>
             }
         }
     }
+    //攻击
+    public void Attack(GameObject _obj)
+    {
+        var info = _obj.GetComponent<ShouCard>().GetCardInfo();
+        if (info.state == 5)
+        {
+            if (info.attackNumber > 0)
+            {
+                attackObj = _obj;
+            }
+        }
+        if (info.state == 6)
+        {
+            beAttackObj = _obj;
+            if (attackObj != null)
+            {
+                Debug.Log("开始攻击");
+                StartCoroutine(AttackIEnumerator(attackObj, beAttackObj));
+            }
+        }
+    }
+    public IEnumerator AttackIEnumerator(GameObject _attack0bj, GameObject _beAttack0bj)
+    {
+        Vector3 oldVec = _attack0bj.transform.position;
+        Vector3 mubiaoVec = _beAttack0bj.transform.Find("BiaoJi").transform.position;
+        _attack0bj.transform.DOMove(mubiaoVec, 0.3f)
+          .SetEase(Ease.InOutQuad);// 设置缓动函数
+        yield return new WaitForSeconds(0.4f);
+        //扣除血量
+        _attack0bj.GetComponent<ShouCard>().addHpNumber(-_beAttack0bj.GetComponent<ShouCard>().GetCardInfo().gjNumberNow);
+        _beAttack0bj.GetComponent<ShouCard>().addHpNumber(-_attack0bj.GetComponent<ShouCard>().GetCardInfo().gjNumberNow);
+        //扣除行动次数
+        _attack0bj.GetComponent<ShouCard>().addAttackNumber(-1);
+       //回到原位
+       _attack0bj.transform.DOMove(oldVec, 0.3f)
+        .SetEase(Ease.InOutQuad);// 设置缓动函数
+        yield return new WaitForSeconds(1f);
+        //检查血量
+        _attack0bj.GetComponent<ShouCard>().CheckHp();
+        _beAttack0bj.GetComponent<ShouCard>().CheckHp();
+        yield return new WaitForSeconds(1f);
+    }
+    //设置层级
+    public void SetCj(int _type)
+    {
+        if (_type == 1)
+        {
+            gamePanel.transform.Find("List2").GetComponent<RectTransform>().SetAsLastSibling();
+        }
+        else
+        {
+            gamePanel.transform.Find("List4").GetComponent<RectTransform>().SetAsLastSibling();
+        }
+       
+    }
+    //销毁场牌
+    public void DesChangCard(GameObject _obj)
+    {
+        bossChangCardList.Remove(_obj);
+        playerChangCardList.Remove(_obj);
+        Destroy(_obj);
+    }
+
 }
 
