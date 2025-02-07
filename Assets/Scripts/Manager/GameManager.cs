@@ -688,16 +688,23 @@ public class GameManager : MonoSingleton<GameManager>
             {
                 if (playerChangCardList.Count > 0)
                 {
-                    int randNumber;
-                    GameObject target;
-                    // 随机选择一个未失活的玩家卡牌
-                    randNumber = Util.randomInt(0, playerChangCardList.Count - 1);
-                    target = playerChangCardList[randNumber];
-                    if (target.activeInHierarchy)
+                    //获取未失活的牌
+                    List<GameObject> list = new List<GameObject>();
+                    foreach (var jtem in playerChangCardList)
                     {
-                        StartCoroutine(AttackIEnumerator(item, target));
-                        yield return new WaitForSeconds(3f);
+                        if (jtem.activeInHierarchy)
+                        {
+                            list.Add(jtem);
+                        }
                     }
+                    //随机攻击
+                    if (list.Count > 0)
+                    {
+                        int randNumber = Util.randomInt(0, list.Count - 1);
+                        StartCoroutine(AttackIEnumerator(item, list[randNumber]));
+                        yield return new WaitForSeconds(2f);
+                    }
+                    
                 }
             }
         }
