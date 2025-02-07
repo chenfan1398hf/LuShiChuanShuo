@@ -346,6 +346,9 @@ public class GameManager : MonoSingleton<GameManager>
     private CardPlayManager cardPlayManager = new CardPlayManager();            //牌局管理
     private GameObject attackObj = null;   //攻击者场牌
     private GameObject beAttackObj = null; //被攻击场牌
+    private GameObject heroObj = null;      //英雄
+    private GameObject bossObj = null;      //boss
+
 
     private GameObject content1;                //玩家手牌
     private GameObject content2;                //玩家场牌
@@ -361,6 +364,9 @@ public class GameManager : MonoSingleton<GameManager>
         content3 = GameObject.Find("Canvas/Panel/List3/Viewport/Content").gameObject;
         content4 = GameObject.Find("Canvas/Panel/List4/Viewport/Content").gameObject;
         gamePanel = GameObject.Find("Canvas/Panel").gameObject;
+
+        heroObj = GameObject.Find("Canvas/Panel/ZhuJiao").gameObject;
+        bossObj = GameObject.Find("Canvas/Panel/Boss").gameObject;
     }
     //结束游戏
     public void EndGame()
@@ -405,6 +411,7 @@ public class GameManager : MonoSingleton<GameManager>
     //初始化牌组
     public void InitCard()
     {
+        InitHero();
         //读取牌组配置
         for (int i = 0; i < paiku.Count; i++)
         {
@@ -443,6 +450,21 @@ public class GameManager : MonoSingleton<GameManager>
 
         //随机牌组的心境类型
         RandXjType();
+    }
+    //初始化英雄数据
+    public void InitHero()
+    {
+        CardInfo info = new CardInfo();
+        info.hpNumberNow = 30;
+        info.state = 7;
+        info.imageId = 1;
+        heroObj.GetComponent<ShouCard>().InitCardInfo(info);
+
+        CardInfo info2 = new CardInfo();
+        info2.hpNumberNow = 30;
+        info2.state = 8;
+        info2.imageId = 2;
+        bossObj.GetComponent<ShouCard>().InitCardInfo(info2);
     }
     //随机牌组心境类型
     public void RandXjType()
@@ -704,7 +726,6 @@ public class GameManager : MonoSingleton<GameManager>
                         StartCoroutine(AttackIEnumerator(item, list[randNumber]));
                         yield return new WaitForSeconds(2f);
                     }
-                    
                 }
             }
         }
@@ -811,7 +832,7 @@ public class GameManager : MonoSingleton<GameManager>
                 attackObj = _obj;
             }
         }
-        if (info.state == 6)
+        if (info.state == 6 || info.state == 8)
         {
             beAttackObj = _obj;
             if (attackObj != null)
