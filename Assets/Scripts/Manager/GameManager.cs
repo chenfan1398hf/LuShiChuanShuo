@@ -726,6 +726,18 @@ public class GameManager : MonoSingleton<GameManager>
                         StartCoroutine(AttackIEnumerator(item, list[randNumber]));
                         yield return new WaitForSeconds(2f);
                     }
+                    else
+                    {
+                        //¹¥»÷Ó¢ÐÛ
+                        StartCoroutine(AttackIEnumerator(item, heroObj));
+                        yield return new WaitForSeconds(2f);
+                    }
+                }
+                else
+                {
+                    //¹¥»÷Ó¢ÐÛ
+                    StartCoroutine(AttackIEnumerator(item, heroObj));
+                    yield return new WaitForSeconds(2f);
                 }
             }
         }
@@ -750,7 +762,7 @@ public class GameManager : MonoSingleton<GameManager>
                 maxIndex = i;
             }
         }
-        if (maxIndex <= 0)
+        if (maxIndex < 0)
         {
             return null;
         }

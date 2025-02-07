@@ -130,9 +130,17 @@ public class ShouCard : MonoBehaviour
     }
     public void CheckHp()
     {
-        if (info.hpNumberNow <= 0)
+        if (info.hpNumberNow <= 0 && info.state < 7)
         {
             this.gameObject.SetActive(false);
+        }
+        if (info.hpNumberNow <= 0 && info.state == 7)
+        {
+            //BOSSÊ¤Àû
+        }
+        if (info.hpNumberNow <= 0 && info.state == 8)
+        {
+            //Íæ¼ÒÊ¤Àû
         }
     }
 }
