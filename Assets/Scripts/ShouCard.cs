@@ -137,10 +137,12 @@ public class ShouCard : MonoBehaviour
         if (info.hpNumberNow <= 0 && info.state == 7)
         {
             //BOSSÊ¤Àû
+            GameManager.instance.EndGame();
         }
         if (info.hpNumberNow <= 0 && info.state == 8)
         {
             //Íæ¼ÒÊ¤Àû
+            GameManager.instance.EndGame();
         }
     }
 }

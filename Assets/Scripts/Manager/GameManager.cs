@@ -394,6 +394,8 @@ public class GameManager : MonoSingleton<GameManager>
         }
         bossChangCardList.Clear();
         playerChangCardList.Clear();
+
+        beginPanel.SetActive(true);
     }
     //¿ªÊ¼ÓÎÏ·
     public void BeginGame()
