@@ -594,17 +594,32 @@ public class GameManager : MonoSingleton<GameManager>
         {
             return false;
         }
-        //先把父节点设置了
-        _obj.transform.SetParent(content2.transform);
-        //获取卡牌数据
-        _cardInfo.state = 5;
-        //删除手牌数据
-        playerShouCardList.Remove(_obj);
-        //加入场牌数据
-        playerChangCardList.Add(_obj);
         //扣除心境值
         cardPlayManager.AddXjNumber(-_cardInfo.xjNumber);
-        
+        //士兵
+        if (_cardInfo.type == 0)
+        {
+            //先把父节点设置了
+            _obj.transform.SetParent(content2.transform);
+            //获取卡牌数据
+            _cardInfo.state = 5;
+            //删除手牌数据
+            playerShouCardList.Remove(_obj);
+            //加入场牌数据
+            playerChangCardList.Add(_obj);
+
+        }
+        //抽卡
+        if (_cardInfo.type == 1)
+        {
+            AddPlayerShouCard(3);
+            //删除手牌数据
+            playerShouCardList.Remove(_obj);
+            //刪除牌
+            Destroy(_obj);
+        }
+
+
         return true;
     }
     //Boss出牌
