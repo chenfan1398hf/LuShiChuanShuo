@@ -12,6 +12,7 @@ public class ShouCard : MonoBehaviour
     private Text xjText;
     private GameObject huiObj;
     private Image bg;
+    private Text xText;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,6 +29,7 @@ public class ShouCard : MonoBehaviour
         gjText = this.transform.Find("Image_gj/Text (Legacy)").GetComponent<Text>();
         hpText = this.transform.Find("Image_hp/Text (Legacy)").GetComponent<Text>();
         xjText = this.transform.Find("Image_xj/Text (Legacy)").GetComponent<Text>();
+        xText = this.transform.Find("Text").GetComponent<Text>();
         cardImage = this.transform.Find("Image_pai").GetComponent<Image>();
         huiObj = this.transform.Find("ImageB").gameObject;
         bg = this.gameObject.GetComponent<Image>();
@@ -40,6 +42,7 @@ public class ShouCard : MonoBehaviour
         hpText.text = info.hpNumberNow.ToString();
         xjText.text = info.xjNumber.ToString();
         GameManager.instance.SpritPropImageByPath("KaPai/"+ info.imageId, cardImage);
+        UpdateXjType();
         UpdateCardBack();
 
     }
@@ -117,10 +120,24 @@ public class ShouCard : MonoBehaviour
         GameManager.instance.Attack(this.gameObject);
     }
     //增加血量
-    public void addHpNumber(int _number)
+    public void addHpNumber(int _number, bool isColor =false)
     {
         info.hpNumberNow += _number;
         ShowCrad();
+        if (isColor)
+        {
+            hpText.color = Color.green;
+        }
+    }
+    //增加攻击
+    public void addGjNumber(int _number, bool isColor = false)
+    {
+        info.gjNumberNow += _number;
+        ShowCrad();
+        if (isColor)
+        {
+            gjText.color = Color.red;
+        }
     }
     //扣除行动次数
     public void addAttackNumber(int _number)
@@ -128,6 +145,7 @@ public class ShouCard : MonoBehaviour
         info.attackNumber += _number;
         ShowAttack();
     }
+    //血量检查
     public void CheckHp()
     {
         if (info.hpNumberNow <= 0 && info.state < 7)
@@ -145,4 +163,30 @@ public class ShouCard : MonoBehaviour
             GameManager.instance.EndGame();
         }
     }
+    //刷新喜怒哀乐显示
+    public void UpdateXjType()
+    {
+        if (info.xjType == 0)
+        {
+            xText.text = "";
+        }
+        else if (info.xjType == 1)
+        {
+            xText.text = "喜";
+        }
+        else if (info.xjType == 2)
+        {
+            xText.text = "怒";
+        }
+        else if (info.xjType == 3)
+        {
+            xText.text = "哀";
+        }
+        else if (info.xjType == 4)
+        {
+            xText.text = "乐";
+        }
+    }
+   
+
 }

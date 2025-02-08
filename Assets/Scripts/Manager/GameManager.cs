@@ -620,7 +620,7 @@ public class GameManager : MonoSingleton<GameManager>
             Destroy(_obj);
         }
 
-
+        ChuPaiTeXiao(_cardInfo.xjType, 1);
         return true;
     }
     //Boss出牌
@@ -655,8 +655,29 @@ public class GameManager : MonoSingleton<GameManager>
         //刷新牌背
         _obj.GetComponent<ShouCard>().UpdateCardBack();
 
-
+        ChuPaiTeXiao(_cardInfo.xjType, 2);
         return true;
+    }
+    //特效牌效果
+    public void ChuPaiTeXiao(int _xjType, int _operand)
+    {
+        List<GameObject> list;
+        if (_operand == 1)
+        {
+            list = playerChangCardList;
+        }
+        else
+        {
+            list = bossChangCardList;
+        }
+        if (_xjType == 1)
+        {
+            //喜（给场牌加BUFF +2血量）
+            foreach (var item in list)
+            {
+                item.GetComponent<ShouCard>().addHpNumber(2,true);
+            }
+        }
     }
     //拖拽牌设置父节点
     public void DrageCardSetFatherOut(GameObject _obj)
@@ -941,6 +962,6 @@ public class GameManager : MonoSingleton<GameManager>
             }
         }
     }
-
+ 
 }
 
