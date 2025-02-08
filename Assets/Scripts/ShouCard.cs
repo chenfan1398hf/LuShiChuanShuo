@@ -73,16 +73,19 @@ public class ShouCard : MonoBehaviour
         if (info.state == 3 && GameManager.instance.GetPlayerOperand())
         {
             GameManager.instance.DrageCardSetFatherOut(this.gameObject);
-            transform.position = Input.mousePosition;
+            Vector3 mouseScreenPosition = Input.mousePosition;
+            Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(new Vector3(mouseScreenPosition.x, mouseScreenPosition.y, 100f));
+            transform.position = mouseWorldPosition;
         }
         
     }
     //结束拖动
     public void EndDragMethod()
     {
+        Debug.Log(this.transform.position.y);
         if (info.state == 3)
         {
-            if (this.transform.position.y >= 400f)
+            if (this.transform.position.y >= 0f)
             {
                 //成功
                 bool isBool = GameManager.instance.ChuCard(this.gameObject, info);

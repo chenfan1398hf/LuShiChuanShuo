@@ -933,6 +933,7 @@ public class GameManager : MonoSingleton<GameManager>
         _attack0bj.transform.DOMove(mubiaoVec, 0.3f)
           .SetEase(Ease.InOutQuad);// 设置缓动函数
         yield return new WaitForSeconds(0.4f);
+        AttackTx(mubiaoVec);
         //扣除血量
         _attack0bj.GetComponent<ShouCard>().addHpNumber(-_beAttack0bj.GetComponent<ShouCard>().GetCardInfo().gjNumberNow);
         _beAttack0bj.GetComponent<ShouCard>().addHpNumber(-_attack0bj.GetComponent<ShouCard>().GetCardInfo().gjNumberNow);
@@ -986,6 +987,12 @@ public class GameManager : MonoSingleton<GameManager>
     {
         beginPanel.SetActive(isBool);
         beginPanel.transform.Find("Text (Legacy)").GetComponent<Text>().text = "当前关卡："+playerData.playerLevel.ToString();
+    }
+    //攻击特效
+    public void AttackTx(Vector3 _vec3)
+    {
+        var obj = AddPrefab("attack", GameObject.Find("Canvas").transform);
+        obj.transform.position = _vec3;
     }
 }
 
