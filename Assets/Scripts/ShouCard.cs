@@ -13,6 +13,9 @@ public class ShouCard : MonoBehaviour
     private GameObject huiObj;
     private Image bg;
     private Text xText;
+    private bool isNuType = false;
+    private bool isAiType = false;
+    public bool isLeType = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,6 +37,11 @@ public class ShouCard : MonoBehaviour
         huiObj = this.transform.Find("ImageB").gameObject;
         bg = this.gameObject.GetComponent<Image>();
         info = _info;
+        //¿÷
+        if (info.xjType == 4)
+        {
+            info.xjNumber = 0;
+        }
         ShowCrad();
     }
     private void ShowCrad()
@@ -150,17 +158,26 @@ public class ShouCard : MonoBehaviour
     {
         if (info.hpNumberNow <= 0 && info.state < 7)
         {
-            this.gameObject.SetActive(false);
+            if (isAiType)
+            {
+                info.hpNumberNow = info.hpNumber;
+                isAiType = false;
+                ShowCrad();
+            }
+            else
+            {
+                this.gameObject.SetActive(false);
+            }
         }
         if (info.hpNumberNow <= 0 && info.state == 7)
         {
             //BOSS §¿˚
-            GameManager.instance.EndGame();
+            GameManager.instance.EndGame(0);
         }
         if (info.hpNumberNow <= 0 && info.state == 8)
         {
             //ÕÊº“ §¿˚
-            GameManager.instance.EndGame();
+            GameManager.instance.EndGame(1);
         }
     }
     //À¢–¬œ≤≈≠∞ß¿÷œ‘ æ
@@ -187,6 +204,22 @@ public class ShouCard : MonoBehaviour
             xText.text = "¿÷";
         }
     }
-   
+    //≈≠
+    public void NuType()
+    {
+        addGjNumber(info.gjNumberNow,true);
+        isNuType = true;
+    }
+    //∞ß
+    public void AiType()
+    {
+        isAiType = true;
+    }
+    //¿÷
+    public void LeType()
+    {
+        isLeType = true;
+
+    }
 
 }

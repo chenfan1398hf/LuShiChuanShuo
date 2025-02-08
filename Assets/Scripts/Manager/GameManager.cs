@@ -359,7 +359,7 @@ public class GameManager : MonoSingleton<GameManager>
     public GameObject beginPanel;
     public void InitGame()
     {
-        beginPanel.SetActive(true);
+        BeginPanel(true);
         content1 = GameObject.Find("Canvas/Panel/List1/Viewport/Content").gameObject;
         content2 = GameObject.Find("Canvas/Panel/List2/Viewport/Content").gameObject;
         content3 = GameObject.Find("Canvas/Panel/List3/Viewport/Content").gameObject;
@@ -370,8 +370,12 @@ public class GameManager : MonoSingleton<GameManager>
         bossObj = GameObject.Find("Canvas/Panel/Boss").gameObject;
     }
     //结束游戏
-    public void EndGame()
+    public void EndGame(int _winType)
     {
+        if (_winType == 1)
+        {
+            playerData.playerLevel++;
+        }
         bossCardList.Clear();
         playerCardList.Clear();
         foreach (var item in bossShouCardList)
@@ -396,12 +400,12 @@ public class GameManager : MonoSingleton<GameManager>
         bossChangCardList.Clear();
         playerChangCardList.Clear();
 
-        beginPanel.SetActive(true);
+        BeginPanel(true);
     }
     //开始游戏
     public void BeginGame()
     {
-        beginPanel.SetActive(false);
+        BeginPanel(false);
         //初始化牌组
         InitCard();
         //初始化牌局管理
@@ -620,7 +624,7 @@ public class GameManager : MonoSingleton<GameManager>
             Destroy(_obj);
         }
 
-        ChuPaiTeXiao(_cardInfo.xjType, 1);
+        ChuPaiTeXiao(_cardInfo.xjType, 1, _obj);
         return true;
     }
     //Boss出牌
@@ -655,11 +659,11 @@ public class GameManager : MonoSingleton<GameManager>
         //刷新牌背
         _obj.GetComponent<ShouCard>().UpdateCardBack();
 
-        ChuPaiTeXiao(_cardInfo.xjType, 2);
+        ChuPaiTeXiao(_cardInfo.xjType, 2, _obj);
         return true;
     }
     //特效牌效果
-    public void ChuPaiTeXiao(int _xjType, int _operand)
+    public void ChuPaiTeXiao(int _xjType, int _operand, GameObject _obj)
     {
         List<GameObject> list;
         if (_operand == 1)
@@ -677,6 +681,21 @@ public class GameManager : MonoSingleton<GameManager>
             {
                 item.GetComponent<ShouCard>().addHpNumber(2,true);
             }
+        }
+        else if (_xjType == 2)
+        {
+            //怒（攻击翻倍 每回合掉血）
+            _obj.GetComponent<ShouCard>().NuType();
+        }
+        else if (_xjType == 3)
+        {
+            //哀（复活）
+            _obj.GetComponent<ShouCard>().AiType();
+        }
+        else if (_xjType == 4)
+        {
+            //乐（无消耗）
+            _obj.GetComponent<ShouCard>().LeType();
         }
     }
     //拖拽牌设置父节点
@@ -962,6 +981,11 @@ public class GameManager : MonoSingleton<GameManager>
             }
         }
     }
- 
+    //開啓開始界面
+    public void BeginPanel(bool isBool)
+    {
+        beginPanel.SetActive(isBool);
+        beginPanel.transform.Find("Text (Legacy)").GetComponent<Text>().text = "当前关卡："+playerData.playerLevel.ToString();
+    }
 }
 

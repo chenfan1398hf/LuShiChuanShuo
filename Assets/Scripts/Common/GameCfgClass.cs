@@ -62,7 +62,7 @@ public class CardInfo
     public int gjNumberNow = 0;         //当前攻击
     public string name;                 //卡牌名称
     public int type = 0;                //卡牌类型0士兵牌 1法术牌
-    public int xjType = 0;              //心境类型0无1喜2怒3哀3乐
+    public int xjType = 0;              //心境类型0无1喜2怒3哀4乐
     public int imageId = 0;             //对应图片id
     public int state = 0;               //1玩家牌组2BOSS牌组3玩家手牌4BOSS手牌5玩家场牌6BOSS场牌7玩家8BOSS
     public int liveHh = 0;              //存在回合数 
