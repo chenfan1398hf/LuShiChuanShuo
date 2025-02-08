@@ -334,6 +334,7 @@ public class GameManager : MonoSingleton<GameManager>
     }
 
     private List<int> paiku = new List<int> { 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15 };
+    //private List<int> paiku = new List<int> {16,16,16,16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16 };
     private List<CardInfo> bossCardList = new List<CardInfo>();             //boss牌组
     private List<CardInfo> playerCardList = new List<CardInfo>();           //玩家牌组
 
@@ -629,18 +630,32 @@ public class GameManager : MonoSingleton<GameManager>
         {
             return false;
         }
-        //先把父节点设置了
-        _obj.transform.SetParent(content4.transform);
-        //获取卡牌数据
-        _cardInfo.state = 6;
-        //删除手牌数据
-        bossShouCardList.Remove(_obj);
-        //加入场牌数据
-        bossChangCardList.Add(_obj);
         //扣除心境值
         cardPlayManager.AddXjNumber(-_cardInfo.xjNumber);
+        if (_cardInfo.type == 0)
+        {
+            //先把父节点设置了
+            _obj.transform.SetParent(content4.transform);
+            //获取卡牌数据
+            _cardInfo.state = 6;
+            //删除手牌数据
+            bossShouCardList.Remove(_obj);
+            //加入场牌数据
+            bossChangCardList.Add(_obj);
+        }
+        //抽卡
+        if (_cardInfo.type == 1)
+        {
+            AddBossShouCard(3);
+            //删除手牌数据
+            bossShouCardList.Remove(_obj);
+            //刪除牌
+            Destroy(_obj);
+        }
         //刷新牌背
         _obj.GetComponent<ShouCard>().UpdateCardBack();
+
+
         return true;
     }
     //拖拽牌设置父节点
@@ -651,7 +666,7 @@ public class GameManager : MonoSingleton<GameManager>
     //拖拽牌设置父节点
     public void DrageCardSetFatherIn(GameObject _obj)
     {
-        _obj.transform.parent = GameObject.Find("Canvas/Panel/List1/Viewport/Content").transform;
+        _obj.transform.SetParent(GameObject.Find("Canvas/Panel/List1/Viewport/Content").transform);
     }
     //刷新心愿值
     public void UpdateXyShow()
