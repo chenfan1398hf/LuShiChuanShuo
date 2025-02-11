@@ -333,6 +333,7 @@ public class GameManager : MonoSingleton<GameManager>
         return allGameObjects.ToArray();
     }
 
+    public MusicManager musicManager;
     private List<int> paiku = new List<int> { 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15 };
     //private List<int> paiku = new List<int> {16,16,16,16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16 };
     private List<CardInfo> bossCardList = new List<CardInfo>();             //boss牌组
@@ -360,6 +361,8 @@ public class GameManager : MonoSingleton<GameManager>
     public void InitGame()
     {
         BeginPanel(true);
+        musicManager = new MusicManager();
+        musicManager.PlayBkMusic("123");
         content1 = GameObject.Find("Canvas/Panel/List1/Viewport/Content").gameObject;
         content2 = GameObject.Find("Canvas/Panel/List2/Viewport/Content").gameObject;
         content3 = GameObject.Find("Canvas/Panel/List3/Viewport/Content").gameObject;
@@ -612,7 +615,10 @@ public class GameManager : MonoSingleton<GameManager>
             playerShouCardList.Remove(_obj);
             //加入场牌数据
             playerChangCardList.Add(_obj);
-
+            if (_cardInfo.gjNumberNow >= 7)
+            {
+                GameManager.instance.GjTx(_obj.transform);
+            }
         }
         //抽卡
         if (_cardInfo.type == 1)
@@ -646,6 +652,10 @@ public class GameManager : MonoSingleton<GameManager>
             bossShouCardList.Remove(_obj);
             //加入场牌数据
             bossChangCardList.Add(_obj);
+            if (_cardInfo.gjNumberNow >= 7)
+            {
+                GameManager.instance.GjTx(_obj.transform);
+            }
         }
         //抽卡
         if (_cardInfo.type == 1)
@@ -993,6 +1003,18 @@ public class GameManager : MonoSingleton<GameManager>
     {
         var obj = AddPrefab("attack", GameObject.Find("Canvas").transform);
         obj.transform.position = _vec3;
+    }
+    //HP特效
+    public void HpTx(Transform _trs)
+    {
+        var obj = AddPrefab("hp", _trs);
+        
+    }
+    //攻击特效
+    public void GjTx(Transform _trs)
+    {
+        var obj = AddPrefab("gj", _trs);
+
     }
 }
 

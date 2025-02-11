@@ -37,11 +37,13 @@ public class ShouCard : MonoBehaviour
         huiObj = this.transform.Find("ImageB").gameObject;
         bg = this.gameObject.GetComponent<Image>();
         info = _info;
+     
         //ÀÖ
         if (info.xjType == 4)
         {
             info.xjNumber = 0;
         }
+      
         ShowCrad();
     }
     private void ShowCrad()
@@ -138,6 +140,10 @@ public class ShouCard : MonoBehaviour
         if (isColor)
         {
             hpText.color = Color.green;
+        }
+        if (_number > 0)
+        {
+            GameManager.instance.HpTx(this.transform);
         }
     }
     //Ôö¼Ó¹¥»÷
