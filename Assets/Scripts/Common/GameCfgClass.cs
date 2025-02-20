@@ -49,6 +49,12 @@ public class CardInfoCfg
     public int type = 0;                //卡牌类型0士兵牌 1法术牌
     public int imageId = 0;             //对应图片id
 }
+//故事配置表
+public class GushiInfoCfg
+{
+    public int ID;                          //ID
+    public string msg;
+}
 
 //牌数据
 public class CardInfo

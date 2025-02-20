@@ -4,11 +4,13 @@ using LitJson;
 using UnityEngine;
 using System.Linq;
 using System.IO;
+using DG.Tweening;
 
 public class ConfigManager
 {
 
     public List<CardInfoCfg> CardInfoCfg = new List<CardInfoCfg>();                             //任务配置
+    public List<GushiInfoCfg> GushiInfoCfg = new List<GushiInfoCfg>();                             //故事配置
     //读取游戏配置表
     public void InitGameCfg()  //初始化自定义的游戏配置表
     {
@@ -16,12 +18,20 @@ public class ConfigManager
         string txt = FileTool.Read_Txt("cardCfg");
         CardInfoCfg = JsonMapper.ToObject<List<CardInfoCfg>>(txt);
 
+        txt = FileTool.Read_Txt("gushiCfg");
+        GushiInfoCfg = JsonMapper.ToObject<List<GushiInfoCfg>>(txt);
+        
+
         return;
     }
 
     public CardInfoCfg GetCardInfoCfgByKey(int key)
     {
         return CardInfoCfg.Find((item) => item.ID == key);
+    }
+    public GushiInfoCfg GetGushiInfoCfgByKey(int key)
+    {
+        return GushiInfoCfg.Find((item) => item.ID == key);
     }
 }
 
@@ -123,5 +133,6 @@ public class CardPlayManager
         GameManager.instance.AddBossShouCard(number);
         GameManager.instance.AddPlayerShouCard(number);
     }
-  
+
+    
 }

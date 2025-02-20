@@ -360,6 +360,7 @@ public class GameManager : MonoSingleton<GameManager>
     public GameObject beginPanel;
     public void InitGame()
     {
+        gushiPanel.SetActive(false);
         BeginPanel(true);
         musicManager = new MusicManager();
         musicManager.PlayBkMusic("123");
@@ -409,6 +410,7 @@ public class GameManager : MonoSingleton<GameManager>
     public void BeginGame()
     {
         BeginPanel(false);
+        gushiPanel.SetActive(false);
         //初始化牌组
         InitCard();
         //初始化牌局管理
@@ -1015,6 +1017,42 @@ public class GameManager : MonoSingleton<GameManager>
     {
         var obj = AddPrefab("gj", _trs);
 
+    }
+    //打字机
+    public GameObject gushiPanel;
+    private Text textComponent; // 需要显示文字的 Text 组件
+    private float duration = 10f; // 打字机效果的持续时间
+    private float delayBetweenCharacters = 0.1f; // 每个字符之间的延迟时间
+
+    private string _targetText; // 目标文字
+    public void StartTypewriter(string text)
+    {
+        _targetText = text;
+        textComponent.text = ""; // 清空初始文字
+
+        // 使用 DOTween 实现打字机效果
+        DOTween.To(
+            () => textComponent.text, // 获取当前文字
+            x => textComponent.text = x, // 设置当前文字
+            _targetText, // 目标文字
+            duration // 持续时间
+        ).SetEase(Ease.Linear) // 线性变化
+         .SetDelay(0.5f) // 延迟开始（可选）
+         .OnUpdate(() => {
+             // 每个字符之间的延迟
+             if (textComponent.text.Length < _targetText.Length)
+             {
+                 textComponent.text += _targetText[textComponent.text.Length];
+             }
+         });
+    }
+    public void OpenGuShiPanel()
+    {
+        gushiPanel.SetActive(true);
+        textComponent = gushiPanel.transform.Find("Text (Legacy)").GetComponent<Text>();
+        var cfg = configMag.GetGushiInfoCfgByKey(playerData.playerLevel);
+        string msg = cfg.msg;
+        StartTypewriter(msg);
     }
 }
 
