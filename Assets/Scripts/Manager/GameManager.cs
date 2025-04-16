@@ -357,6 +357,7 @@ public class GameManager : MonoSingleton<GameManager>
     private GameObject content3;                //BOSS手牌
     private GameObject content4;                //BOSS场牌
     private GameObject gamePanel;               //游戏panel节点
+    public GameObject cardShowPanel;           //卡牌展示界面
     public GameObject beginPanel;
     public void InitGame()
     {
@@ -372,6 +373,9 @@ public class GameManager : MonoSingleton<GameManager>
 
         heroObj = GameObject.Find("Canvas/Panel/ZhuJiao").gameObject;
         bossObj = GameObject.Find("Canvas/Panel/Boss").gameObject;
+
+        InitShowCard();
+        ShowCardPanel(false);
     }
     //结束游戏
     public void EndGame(int _winType)
@@ -462,6 +466,31 @@ public class GameManager : MonoSingleton<GameManager>
 
         //随机牌组的心境类型
         RandXjType();
+    }
+    //初始化卡牌展示界面
+    public void InitShowCard()
+    {
+        var trs = cardShowPanel.transform.Find("bg/List1/Viewport/Content").transform;
+
+        for (int i = 0; i < configMag.CardInfoCfg.Count; i++)
+        {
+            CardInfo cardInfo = new CardInfo();
+            CardInfoCfg cfg = configMag.CardInfoCfg[i];
+            cardInfo.addId = i+300;
+            cardInfo.id = cfg.ID;
+            cardInfo.xjNumber = cfg.xjNumber;
+            cardInfo.hpNumber = cfg.hpNumber;
+            cardInfo.gjNumber = cfg.gjNumber;
+            cardInfo.hpNumberNow = cfg.hpNumber;
+            cardInfo.gjNumberNow = cfg.gjNumber;
+            cardInfo.name = cfg.name;
+            cardInfo.type = cfg.type;
+            cardInfo.imageId = cfg.imageId;
+            cardInfo.state = 9;
+            var obj = AddPrefab("ShouCard", trs);
+            obj.GetComponent<ShouCard>().InitCardInfo(cardInfo);
+        }
+        
     }
     //初始化英雄数据
     public void InitHero()
@@ -1053,6 +1082,11 @@ public class GameManager : MonoSingleton<GameManager>
         var cfg = configMag.GetGushiInfoCfgByKey(playerData.playerLevel);
         string msg = cfg.msg;
         StartTypewriter(msg);
+    }
+    //开关卡牌展示界面
+    public void ShowCardPanel(bool _isBool)
+    {
+        cardShowPanel.SetActive(_isBool);
     }
 }
 
