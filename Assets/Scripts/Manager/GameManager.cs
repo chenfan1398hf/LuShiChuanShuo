@@ -364,7 +364,7 @@ public class GameManager : MonoSingleton<GameManager>
         gushiPanel.SetActive(false);
         BeginPanel(true);
         musicManager = new MusicManager();
-        musicManager.PlayBkMusic("123");
+        musicManager.PlayBkMusic("0");
         content1 = GameObject.Find("Canvas/Panel/List1/Viewport/Content").gameObject;
         content2 = GameObject.Find("Canvas/Panel/List2/Viewport/Content").gameObject;
         content3 = GameObject.Find("Canvas/Panel/List3/Viewport/Content").gameObject;
@@ -423,6 +423,7 @@ public class GameManager : MonoSingleton<GameManager>
         UpdateXyShow();
         //刷新结束回合按钮
         UpdateEndHuiHeBUtton();
+        musicManager.PlayBkMusic(playerData.playerLevel.ToString());
     }
     //初始化牌组
     public void InitCard()
@@ -1084,6 +1085,7 @@ public class GameManager : MonoSingleton<GameManager>
     {
         beginPanel.SetActive(isBool);
         beginPanel.transform.Find("Text (Legacy)").GetComponent<Text>().text = "当前关卡："+playerData.playerLevel.ToString();
+
     }
     //攻击特效
     public void AttackTx(Vector3 _vec3)
