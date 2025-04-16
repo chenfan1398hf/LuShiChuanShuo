@@ -212,12 +212,20 @@ public class ShouCard : MonoBehaviour
         {
             xText.text = "¿÷";
         }
+        else if (info.xjType == 5)
+        {
+            xText.text = "±¨";
+        }
     }
     //≈≠
     public void NuType()
     {
         addGjNumber(info.gjNumberNow,true);
         isNuType = true;
+    }
+    public void BaoType()
+    {
+        addGjNumber(2, true);
     }
     //∞ß
     public void AiType()

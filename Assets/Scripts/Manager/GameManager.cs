@@ -611,6 +611,22 @@ public class GameManager : MonoSingleton<GameManager>
             int randNumber = Util.randomInt(1, 29);
             playerCardList[randNumber].xjType = playerRand[i];
         }
+        for (int i = 0; i < 5; i++)
+        {
+            int randNumber = Util.randomInt(1, 29);
+            playerCardList[randNumber].xjType = 5;
+        }
+        //for (int i = 0; i < 5; i++)
+        //{
+        //    for (int j = 0; j < playerCardList.Count; j++)
+        //    {
+        //        if (playerCardList[j].xjType == 0)
+        //        {
+        //            playerCardList[j].xjType = 5;
+        //            break;
+        //        }
+        //    }
+        //}
     }
     //添加玩家手牌
     public void AddPlayerShouCard(int _number)
@@ -768,6 +784,14 @@ public class GameManager : MonoSingleton<GameManager>
         {
             //乐（无消耗）
             _obj.GetComponent<ShouCard>().LeType();
+        }
+        else if (_xjType == 5)
+        {
+            foreach (var item in list)
+            {
+                item.GetComponent<ShouCard>().addHpNumber(2, true);
+                item.GetComponent<ShouCard>().BaoType();
+            }
         }
     }
     //拖拽牌设置父节点
