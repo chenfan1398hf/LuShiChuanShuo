@@ -792,6 +792,7 @@ public class GameManager : MonoSingleton<GameManager>
                 item.GetComponent<ShouCard>().addHpNumber(2, true);
                 item.GetComponent<ShouCard>().BaoType();
             }
+            GameManager.instance.BoomTx(Vector3.zero);
         }
     }
     //拖拽牌设置父节点
@@ -1088,6 +1089,11 @@ public class GameManager : MonoSingleton<GameManager>
     public void AttackTx(Vector3 _vec3)
     {
         var obj = AddPrefab("attack", GameObject.Find("Canvas").transform);
+        obj.transform.position = _vec3;
+    }
+    public void BoomTx(Vector3 _vec3)
+    {
+        var obj = AddPrefab("boom", GameObject.Find("Canvas").transform);
         obj.transform.position = _vec3;
     }
     //HP特效
