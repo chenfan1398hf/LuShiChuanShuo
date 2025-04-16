@@ -334,7 +334,7 @@ public class GameManager : MonoSingleton<GameManager>
     }
 
     public MusicManager musicManager;
-    private List<int> paiku = new List<int> { 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15 };
+    private List<int> paiku = new List<int> { 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 18, 18 };
     //private List<int> paiku = new List<int> {16,16,16,16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16 };
     private List<CardInfo> bossCardList = new List<CardInfo>();             //boss牌组
     private List<CardInfo> playerCardList = new List<CardInfo>();           //玩家牌组
@@ -464,6 +464,19 @@ public class GameManager : MonoSingleton<GameManager>
         Util.shuffle<CardInfo>(bossCardList);
         Util.shuffle<CardInfo>(playerCardList);
 
+        //把补满心境牌 让玩家以来就摸到
+        int index = 0; 
+        for (int i = 0; i < playerCardList.Count; i++)
+        {
+            if (playerCardList[i].type == 3)
+            {
+                index = i;
+                break;
+            }
+        }
+        CardInfo cardToMove = playerCardList[index];
+        playerCardList.RemoveAt(index);
+        playerCardList.Insert(0, cardToMove);
         //随机牌组的心境类型
         RandXjType();
     }
@@ -660,6 +673,15 @@ public class GameManager : MonoSingleton<GameManager>
             //刪除牌
             Destroy(_obj);
         }
+        //心境补充
+        if (_cardInfo.type == 3)
+        {
+            cardPlayManager.AddXjAll();
+            //删除手牌数据
+            bossShouCardList.Remove(_obj);
+            //刪除牌
+            Destroy(_obj);
+        }
 
         ChuPaiTeXiao(_cardInfo.xjType, 1, _obj);
         return true;
@@ -692,6 +714,15 @@ public class GameManager : MonoSingleton<GameManager>
         if (_cardInfo.type == 1)
         {
             AddBossShouCard(3);
+            //删除手牌数据
+            bossShouCardList.Remove(_obj);
+            //刪除牌
+            Destroy(_obj);
+        }
+        //心境补充
+        if (_cardInfo.type == 3)
+        {
+            cardPlayManager.AddXjAll();
             //删除手牌数据
             bossShouCardList.Remove(_obj);
             //刪除牌

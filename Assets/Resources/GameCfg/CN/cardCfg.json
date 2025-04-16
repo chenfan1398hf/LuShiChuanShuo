@@ -136,7 +136,7 @@
   },
   {
     "ID": 16,
-    "xjNumber": 1,
+    "xjNumber": 4,
     "hpNumber": 0,
     "gjNumber": 0,
     "name": "抽卡",
@@ -151,5 +151,14 @@
     "name": "buff",
     "type": 2,
     "imageId": 17
+  },
+  {
+    "ID": 18,
+    "xjNumber": 0,
+    "hpNumber": 0,
+    "gjNumber": 0,
+    "name": "心境补满",
+    "type": 3,
+    "imageId": 46
   }
 ]

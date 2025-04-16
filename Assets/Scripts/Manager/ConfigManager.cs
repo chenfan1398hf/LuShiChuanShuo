@@ -126,6 +126,13 @@ public class CardPlayManager
         //刷新
         GameManager.instance.UpdateXyShow();
     }
+    //补满心境
+    public void AddXjAll()
+    {
+        xyNumber = GetHhXyNumber();
+        //刷新
+        GameManager.instance.UpdateXyShow();
+    }
     //发牌
     public void FaPaiFirst()
     {
