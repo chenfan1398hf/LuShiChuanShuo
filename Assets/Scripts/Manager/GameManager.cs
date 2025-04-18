@@ -513,13 +513,13 @@ public class GameManager : MonoSingleton<GameManager>
         CardInfo info = new CardInfo();
         info.hpNumberNow = 30;
         info.state = 7;
-        info.imageId = 1;
+        info.imageId = 200;
         heroObj.GetComponent<ShouCard>().InitCardInfo(info);
 
         CardInfo info2 = new CardInfo();
         info2.hpNumberNow = 30;
         info2.state = 8;
-        info2.imageId = 2;
+        info2.imageId = playerData.playerLevel+100;
         bossObj.GetComponent<ShouCard>().InitCardInfo(info2);
     }
     //随机牌组心境类型
