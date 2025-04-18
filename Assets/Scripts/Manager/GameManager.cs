@@ -383,6 +383,7 @@ public class GameManager : MonoSingleton<GameManager>
         if (_winType == 1)
         {
             playerData.playerLevel++;
+            ButtonAudio4();
         }
         bossCardList.Clear();
         playerCardList.Clear();
@@ -689,6 +690,7 @@ public class GameManager : MonoSingleton<GameManager>
             playerShouCardList.Remove(_obj);
             //刪除牌
             Destroy(_obj);
+            ButtonAudio2();
         }
         //心境补充
         if (_cardInfo.type == 3)
@@ -735,11 +737,12 @@ public class GameManager : MonoSingleton<GameManager>
             bossShouCardList.Remove(_obj);
             //刪除牌
             Destroy(_obj);
+            ButtonAudio2();
         }
         //心境补充
         if (_cardInfo.type == 3)
         {
-            cardPlayManager.AddXjAll();
+            //cardPlayManager.AddXjAll();
             //删除手牌数据
             bossShouCardList.Remove(_obj);
             //刪除牌
@@ -1092,6 +1095,7 @@ public class GameManager : MonoSingleton<GameManager>
     {
         var obj = AddPrefab("attack", GameObject.Find("Canvas").transform);
         obj.transform.position = _vec3;
+        musicManager.PlaySound("打击");
     }
     public void BoomTx(Vector3 _vec3)
     {
@@ -1150,6 +1154,27 @@ public class GameManager : MonoSingleton<GameManager>
     public void ShowCardPanel(bool _isBool)
     {
         cardShowPanel.SetActive(_isBool);
+    }
+
+    public void ButtonAudio1()
+    {
+        musicManager.PlaySound("按钮");
+    }
+    public void ButtonAudio2()
+    {
+        musicManager.PlaySound("抽牌");
+    }
+    public void ButtonAudio3()
+    {
+        musicManager.PlaySound("卡牌展示");
+    }
+    public void ButtonAudio4()
+    {
+        musicManager.PlaySound("胜利");
+    }
+    public void ButtonAudio5()
+    {
+        musicManager.PlaySound("胜利下一步");
     }
 }
 
