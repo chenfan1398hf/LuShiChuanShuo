@@ -425,6 +425,9 @@ public class GameManager : MonoSingleton<GameManager>
         //刷新结束回合按钮
         UpdateEndHuiHeBUtton();
         musicManager.PlayBkMusic(playerData.playerLevel.ToString());
+        //修改场地背景
+        var image = gamePanel.transform.Find("bg").GetComponent<Image>();
+        GameManager.instance.SpritPropImageByPath("Tex/"+playerData.playerLevel.ToString(), image);
     }
     //初始化牌组
     public void InitCard()
